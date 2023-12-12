@@ -47,7 +47,21 @@ if (mysqli_query($con, $sql)) {
         // echo "$current_balance";
         header('location:dash.php');
     }
+    if ($current_balance >= $amount && $type == "expense") {
+        // Deduct the expense amount from the user's balance
+        $new_balance = $current_balance - $amount;
 
+        // Insert the new expense record
+        // mysqli_query($con, "INSERT INTO expense (user_id, comodity, amount) VALUES ($user_id, $commodity, $amount)");
+
+        // Update the user's balance
+        mysqli_query($con, "UPDATE `account` SET `balance` = $new_balance WHERE `user_id` = $user_id");
+
+        mysqli_query($con, "UPDATE `account` SET `expense` = `expense` + $amount WHERE `user_id` = '$user_id'");
+
+        // echo "Expense added successfully. New balance: $new_balance";
+        header('location:dash.php');
+    }
 } else {
     echo "Error: " . mysqli_error($con);
 }
